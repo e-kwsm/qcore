@@ -106,6 +106,7 @@ def disabled(func_or_class):
 
     def decorate_class(class_):
         class_.setup = class_.teardown = lambda self: None
+        class_.setup_method = class_.teardown_method = lambda self: None
         return decorate_all_test_methods(decorate_func)(class_)
 
     if inspect.isfunction(func_or_class):
