@@ -4,10 +4,10 @@ from typing import (
     Callable,
     ContextManager,
     Generic,
+    Optional,
     Tuple,
     Type,
     TypeVar,
-    Optional,
     Union,
 )
 
@@ -32,7 +32,9 @@ class DecoratorBase(Generic[_T]):
     def is_decorator(self) -> bool: ...
     @abstractmethod
     def __call__(self, *args: Any, **kwargs: Any) -> _T: ...
-    def __get__(self, owner: object, cls: Type[object]) -> DecoratorBinder[_T]: ...
+    def __get__(
+        self, owner: object, cls: Type[object]
+    ) -> Union[DecoratorBase[_T], DecoratorBinder[_T]]: ...
 
 def decorate(
     decorator_cls: Type[DecoratorBase[_T]], *args: Any, **kwargs: Any
