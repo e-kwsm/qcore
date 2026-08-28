@@ -39,6 +39,12 @@ def get_original_fn(fn):
         except AttributeError:
             pass
         return original_fn
+    # Handle DecoratorBinder objects (e.g., AsyncDecoratorBinder)
+    # When a method decorated with DecoratorBase is accessed via Class.method or instance.method,
+    # Python's descriptor protocol automatically calls DecoratorBase.__get__(), which returns
+    # DecoratorBinder object. Get original function from DecoratorBinder -> .decorator -> .fn
+    if hasattr(fn, "decorator") and hasattr(fn.decorator, "fn"):
+        return get_original_fn(fn.decorator.fn)
     return fn
 
 
